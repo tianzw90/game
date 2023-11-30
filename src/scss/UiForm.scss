@@ -1,0 +1,38 @@
+/**
+ * 项目   element-demo
+ * 作者   zhang yiwen
+ * 时间   2019/7/24 17:19
+ */
+
+.w25{width: 25%;}
+.w33{width: 33.33%;}
+.w50{width: 50%;}
+.w75{width: 75%;}
+.w100{width: 100%;}
+.map-search-bar, .map-form, .dialog-form{
+  .el-form-item{
+    display: inline-block;
+    .el-form-item__label{
+      overflow: hidden;
+      word-break: keep-all;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    .el-form-item__content{
+      //width: calc(100% - 120px);
+      .el-select{width: 100%;}
+      .el-date-editor.el-input, .el-date-editor.el-input__inner{width: 100%;}
+    }
+  }
+}
+.map-search-bar .el-form-item{
+  margin-bottom: 10px;
+}
+.map-form .el-form-item{
+  margin-bottom: 15px;
+}
+.mb-15{margin-bottom: 10px;}
+
+.map-handle-bar{
+  margin-bottom: 10px;
+}
