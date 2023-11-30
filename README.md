@@ -1,5 +1,11 @@
 # game_frontend
 
+## Project desc
+```
+vue 3
+element plus 2.4
+```
+
 ## Project setup
 ```
 npm install
