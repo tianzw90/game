@@ -13,7 +13,7 @@ export default {
 
 <style lang="scss" scoped>
 #app {
-  height: 100vh;
+  height: 98vh;
   margin: 0;
   overflow: hidden;
 }

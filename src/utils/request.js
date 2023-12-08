@@ -11,13 +11,53 @@ const uri = 'http://localhost:18282'
  */
 const request = {
   /**
+   * get请求 (请求成功没有消息提示)
+   * @param options
+   * @returns {PromiseLike<T | never> | Promise<T | never> | *}
+   */
+  getAxiosWithNoMsg: function (options) {
+    options.method = 'get'
+    return this.axios(options)
+      .then(function (response) {
+        if (response.data.code !== '0') {
+          ElMessage.error(response.data.message)
+        }
+        return response
+      })
+  },
+  /**
+   * post请求 (请求成功没有消息提示)
+   * @param options
+   * @returns {PromiseLike<T | never> | Promise<T | never> | *}
+   */
+  postAxiosWithNoMsg: function (options) {
+    console.log('进入post方法')
+    options.method = 'post'
+    options.headers = {
+      'Content-type': 'application/json'
+    }
+    return this.axios(options)
+      .then(function (response) {
+        if (response.data.code !== '0') {
+          ElMessage.error(response.data.message)
+        }
+        return response
+      })
+  },
+  /**
    * get请求
    * @param options
    * @returns {PromiseLike<T | never> | Promise<T | never> | *}
    */
   getAxios: function (options) {
-    return this.base(options)
+    options.method = 'get'
+    return this.axios(options)
       .then(function (response) {
+        if (response.data.code === '0') {
+          ElMessage.success(response.data.message)
+        } else {
+          ElMessage.warning(response.data.message)
+        }
         return response
       })
   },
@@ -34,6 +74,11 @@ const request = {
     }
     return this.axios(options)
       .then(function (response) {
+        if (response.data.code === '0') {
+          ElMessage.success(response.data.message)
+        } else {
+          ElMessage.warning(response.data.message)
+        }
         return response
       })
   },
@@ -47,11 +92,6 @@ const request = {
     options.url = uri + options.url
     return axios(options)
       .then(response => {
-        if (response.data.code === '0') {
-          ElMessage.success(response.data.message)
-        } else {
-          ElMessage.warning(response.data.message)
-        }
         return response
       })
       // .catch(error => {

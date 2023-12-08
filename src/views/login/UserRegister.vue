@@ -1,6 +1,6 @@
 <template>
   <div class="home-register">
-    <el-form :inline="true" :model="sysUserForm" :rules="sysUserFormRules" ref="sysUserForm" label-position="left" class="demo-form-inline" label-width="90px">
+    <el-form :model="sysUserForm" :rules="sysUserFormRules" ref="sysUserForm" label-position="left" class="demo-form-inline" label-width="90px">
       <el-form-item label="用户名" class="w50" prop="userName">
         <el-input v-model="sysUserForm.userName" placeholder="用户名" clearable />
       </el-form-item>
@@ -50,7 +50,7 @@ import request from '@/utils/request'
 import commonUtils from '@/utils/commonUtils'
 import uiUtils from '@/utils/uiUtils'
 export default {
-  name: 'HomeRegister',
+  name: 'UserRegister',
   data () {
     const passWordValidator = (rule, value, callback) => {
       if (value !== this.sysUserForm.passWord) {
@@ -123,7 +123,7 @@ export default {
             if (response.data.code === '0') {
               _self.$message.success('注册成功，2秒后自动跳转登录页面。')
               setTimeout(() => {
-                _self.$router.push('/')
+                _self.$router.push('/userLogin')
               }, 2000)
             }
           })
@@ -144,16 +144,17 @@ export default {
 .home-register {
   position: fixed;
   height: 100%;
+  width: 100%;
   background-image: url("../../assets/dnf1.png");
 }
 .demo-form-inline {
   position: relative;
   margin-top: 3%;
-  margin-left: 30%;
+  margin-left: 20%;
 }
 .home-register-button {
   position: relative;
-  margin-left: 20%;
+  margin-left: 10%;
 }
 
 </style>

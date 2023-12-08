@@ -59,17 +59,129 @@ const commonUtils = {
   checkForm: function (ruleForm, _self) {
     return new Promise((resolve, reject) => {
       _self.$refs[ruleForm].validate((valid) => {
-        let bool = false
-        // eslint-disable-next-line no-debugger
-        debugger
-        bool = valid
         if (!valid) {
           uiUtils.defaultMessage('表单有字段校验未通过，请检查标红输入框')
+          resolve(valid)
         } else {
-          resolve(bool)
+          resolve(valid)
+          return true
         }
       })
     })
+  },
+  /**
+   * 获取默认查询条件
+   * @param searchForm
+   * @returns {string}
+   */
+  getDefaultFilter: function (searchForm) {
+    let filter = ''
+    const _self = this
+    if (!(JSON.stringify(searchForm) === '{}')) {
+      Object.keys(searchForm).forEach(function (key) {
+        let symbol = '&'
+        if (filter === '') {
+          symbol = ''
+        }
+        if (searchForm[key] != null) {
+          if (typeof searchForm[key] === 'object') {
+            const d0 = searchForm[key][0]
+            const d1 = searchForm[key][1]
+            // 判断是时间范围查询
+            if (typeof d0 === 'object' && typeof d1 === 'object') {
+              filter += symbol + key + '_begin' + '=' + _self.dateFormat(d0)
+              filter += '&' + key + '_end' + '=' + _self.dateFormat(d1)
+            } else { // 判断是数字范围查询
+              if (!commonUtils.isStrIsNull(d0) && !commonUtils.isStrIsNull(d1)) {
+                filter += symbol + key + '_min' + '=' + d0
+                filter += '&' + key + '_max' + '=' + d1
+              } else if (!commonUtils.isStrIsNull(d0)) {
+                filter += symbol + key + '_min' + '=' + d0
+              } else if (!commonUtils.isStrIsNull(d1)) {
+                filter += symbol + key + '_max' + '=' + d1
+              }
+            }
+          } else {
+            filter += symbol + key + '=' + searchForm[key]
+          }
+        }
+      })
+    }
+    return encodeURIComponent(filter)
+  },
+  /**
+   * 抽取公共分页
+   * @returns {number[]}
+   */
+  paginationPageSize: function () {
+    return [10, 20, 30, 40]
+  },
+  /**
+   * 格式化时间
+   * @param row
+   * @param column
+   * @param value
+   * @param index
+   * @returns {*|string}
+   */
+  formatDate (row, column, value, index) {
+    return commonUtils.formatDateNormal(value)
+  },
+  formatDateNormal (str) {
+    if (commonUtils.isStrIsNull(str)) {
+      return str
+    }
+    const date = new Date(str).toJSON()
+    return new Date(+new Date(date) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+  },
+  /**
+   * 字符串是否是空
+   * @param str
+   * @returns {Boolean}
+   * @author wht
+   */
+  isStrIsNull: function (str) {
+    if (str === null || str === '' || str === undefined || str === 'undefined' || str === 'null') {
+      return true
+    }
+    return false
+  },
+  /**
+   * 获取数据的ids 数组
+   * @param data
+   * @returns {Array}
+   */
+  getTableDataIdsArr (data) {
+    const ids = []
+    for (let i = 0; i < data.length; i++) {
+      ids.push(data[i].id)
+    }
+    return ids
+  },
+  /**
+   * element ui中表格字段中美化金额
+   * @param row
+   * @param column
+   * @param value
+   * @param index
+   * @returns {number|string}
+   */
+  formatMoney (row, column, value, index) {
+    return commonUtils.formatMoneyNormal(value)
+  },
+  /**
+   * 美化金额显示，例如983726.22元显示为983,726.22
+   * @param value
+   * @returns {number | string}
+   */
+  formatMoneyNormal (value) {
+    if (value && !isNaN(value)) {
+      value = parseFloat(value)
+      if (value > 999 || value < 0) {
+        value = value.toLocaleString()
+      }
+    }
+    return value
   }
 }
 export default commonUtils

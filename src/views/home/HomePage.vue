@@ -1,46 +1,34 @@
 <template>
-    <div class="home-page">
-      <div class="home-page-left">
-        <HomeLogin />
-      </div>
-      <div class="home-page-right"></div>
-    </div>
+  <div class="home-page" />
 </template>
 
 <script>
-import HomeLogin from '@/views/login/HomeLogin'
+import { userInfoStore } from '@/store'
 export default {
-  components: { HomeLogin },
   name: 'HomePage',
   data () {
     return {
-      winHeight: window.innerHeight
+      userInfo: {}
+    }
+  },
+  mounted () {
+    this.getUserInfo()
+  },
+  methods: {
+    getUserInfo () {
+      this.request.getAxiosWithNoMsg({
+        url: '/sysUser/getUserInfo'
+      }).then(function (response) {
+        const userInfo = userInfoStore()
+        userInfo.setUserInfo(response.data.result)
+      })
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.home-page-left {
-  width: 70%;
-  height: 100%;
-}
-.home-page-right {
-  width: 30%;
-  height: 100%;
-  //background-color: #918e8e;
-}
 .home-page {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-image: url("@/assets/dnf1.png");
-}
-</style>
-<style lang="scss">
-body{
-  margin: 0;
-  overflow: hidden;
+  background-color: rebeccapurple;
 }
 </style>
